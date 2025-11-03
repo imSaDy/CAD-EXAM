@@ -4,11 +4,9 @@ module MultO (
     input load_mult,
     input [7:0] W,
     input done,
-    input load_count_mult,
     input [2:0] shift_count,
     input mult_shift_en,
     input en_num_shift,
-    input load_ready_en,
     input rst_ready,
     
     output [15:0] final_partial,

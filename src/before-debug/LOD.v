@@ -5,7 +5,6 @@ module LOD(
     input [7:0] A,
     input shift_en,
     input cnt_en,
-    input [2:0] outputPI,
     output [2:0] shift_count,
     output co_LOD,
     output done
