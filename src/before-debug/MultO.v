@@ -8,6 +8,7 @@ module MultO (
     input mult_shift_en,
     input en_num_shift,
     input rst_ready,
+    input load_num_shift,
     
     output [15:0] final_partial,
     output ready

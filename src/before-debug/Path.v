@@ -17,6 +17,7 @@ module Path(
     input load_sub_reg,
     input load_PI_sub,
     input en_cnt_sub,
+    input load_num_shift,
     output [15:0] partialO,
     output done,
     output ready,
@@ -85,6 +86,7 @@ module Path(
         .ready(ready),
         .shift_count(shift_count_dp), // possibly bug
         .mult_shift_en(mult_shift_en),
+        .load_num_shift(load_num_shift),
         .en_num_shift(en_num_shift),
         .rst_ready(rst_ready),
         .final_partial(partialO),

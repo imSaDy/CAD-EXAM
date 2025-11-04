@@ -18,6 +18,7 @@ module DataPath(
     input load_sub_reg1,
     input load_PI_sub1,
     input en_cnt_sub1,
+    input load_num_shift1,
 
     input selA2,
     input loadA2,
@@ -35,6 +36,7 @@ module DataPath(
     input load_sub_reg2,
     input load_PI_sub2,
     input en_cnt_sub2,
+    input load_num_shift2,
 
     input rst_acc,
     input sel_P,
@@ -74,6 +76,7 @@ module DataPath(
         .load_sub_reg(load_sub_reg1),
         .load_PI_sub(load_PI_sub1),
         .en_cnt_sub(en_cnt_sub1),
+        .load_num_shift(load_num_shift1),
         
         .partialO(Partial1),
         .done(done1),
@@ -100,6 +103,7 @@ module DataPath(
         .load_sub_reg(load_sub_reg2),
         .load_PI_sub(load_PI_sub2),
         .en_cnt_sub(en_cnt_sub2),
+        .load_num_shift(load_num_shift2),
         
         .partialO(Partial2),
         .done(done2),
