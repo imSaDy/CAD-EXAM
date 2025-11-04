@@ -1,4 +1,4 @@
-module Path1(
+module Path(
     input clk,
     input rst,
     input selA,
@@ -17,7 +17,6 @@ module Path1(
     input load_sub_reg,
     input load_PI_sub,
     input en_cnt_sub,
-
     output [15:0] partialO,
     output done,
     output ready,
