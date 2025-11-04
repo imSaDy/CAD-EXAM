@@ -13,13 +13,19 @@ module Path1(
     input load_mult, 
     input rst_ready,
     input en_num_shift,
-    
+    input shift_en_sub,
+    input load_sub_reg,
+    input load_PI_sub,
+    input en_cnt_sub,
+
     output [15:0] partialO,
     output done,
-    output ready
+    output ready,
+    output co_sub
 );
-    wire [7:0] mux_out, xor_out, A, W;
-    wire [2:0] wire_shift_count, shift_count_dp;
+    wire [7:0] mux_out, xor_out, A, W, sub;
+    wire [2:0] wire_shift_count, shift_count_dp, sub_cnt;
+    wire co_sub; 
 
     Mux2 #(
         .WIDTH(8),
@@ -85,38 +91,42 @@ module Path1(
         .final_partial(partialO),
     );
     
-    // need to continue
+    
 
     ShiftRegister #(
-        .WIDTH(WIDTH_SUB)
-    ) shift_reg_sub_inst (
+        .WIDTH(8)
+    ) shift_reg_sub (
         .clk(clk),
         .rst(rst),
         .shift_en(shift_en_sub),
         .ser_in(1'b0),
         .load(load_sub_reg),
-        .PI(sub_in),
-        .data_out(wire_sub)
+        .PI(8'b1),
+        .data_out(sub)
     );
 
+    assign xor_out = sub ^ A;
+
     Counter #(
-        .WIDTH(WIDTH_C)
+        .WIDTH(3) 
     ) counter_P1_inst (
         .clk(clk),
         .rst(rst),
-        .load(load_P1),
-        .en(en_P1),
-        .PI(PI_P1),
-        .count(wire_count_P1)
+        .load(load_PI_sub),
+        .en(en_cnt_sub),
+        .PI(4'b1000 - shift_count_dp), // possibly bug
+        .count(sub_cnt)
     );
 
+    assign wire_co_sub = &sub_cnt; 
+
     Register #(
-        .WIDTH(WIDTH_C)
+        .WIDTH(1)
     ) reg_co_sub_inst (
         .clk(clk),
-        .rst(rst),
-        .load(ld_co_sub),
-        .PI(wire_count_P1),
-        .register(wire_co_sub)
+        .rst(rst), // possibly bug
+        .load(wire_co_sub),
+        .PI(wire_co_sub),
+        .register(co_sub)
     );
 endmodule
