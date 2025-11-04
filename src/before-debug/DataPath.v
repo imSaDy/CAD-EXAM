@@ -115,7 +115,7 @@ module DataPath(
     assign done = done1 | done2;
 
     Accumulator #(
-        .WIDTH(WIDTH_P)
+        .WIDTH(16)
     ) accumulator (
         .clk(clk),
         .rst(rst), // possibly bug

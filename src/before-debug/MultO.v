@@ -41,13 +41,13 @@ module MultO (
     );
     
     Mux2 #(
-        .WIDTH(16),
+        .WIDTH(16)
     ) mux (
         .in0(partial),
         .in1(16'b0),
         .sel(done),
         .out(final_partial)
-    )
+    );
 
     Register #(
         .WIDTH(1)

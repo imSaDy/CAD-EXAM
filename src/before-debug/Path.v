@@ -25,16 +25,15 @@ module Path(
 );
     wire [7:0] mux_out, xor_out, A, W, sub;
     wire [2:0] wire_shift_count, shift_count_dp, sub_cnt;
-    wire co_sub; 
 
     Mux2 #(
-        .WIDTH(8),
+        .WIDTH(8)
     ) mux (
         .in0(A_init),
         .in1(xor_out),
         .sel(selA),
         .out(mux_out)
-    )
+    );
 
     Register #(
         .WIDTH(8)
@@ -89,7 +88,7 @@ module Path(
         .load_num_shift(load_num_shift),
         .en_num_shift(en_num_shift),
         .rst_ready(rst_ready),
-        .final_partial(partialO),
+        .final_partial(partialO)
     );
     
     

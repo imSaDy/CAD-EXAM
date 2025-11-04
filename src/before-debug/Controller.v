@@ -4,8 +4,8 @@ module Controller(
     input start,
     
     input done,
-    input Ready1,
-    input Ready2,
+    input ready1,
+    input ready2,
     input co_sub1,
     input co_sub2,
     input co_lod,
@@ -72,7 +72,7 @@ module Controller(
         case (ps) 
             IDLE: ns = (start ? LOAD_A_W : IDLE);
             LOAD_A_W: ns = LOAD_LOD;
-            LOAD_LOD: ns = CALCULATE_LOT;
+            LOAD_LOD: ns = CALCULATE_LOD;
             CALCULATE_LOD: ns = (co_lod ? CALCULATE_MULT : CALCULATE_LOD);
             CALCULATE_MULT: ns = ((ready1 && ready2) ? SUB_A : CALCULATE_MULT);
             SUB_A: ns = ((co_sub1 && co_sub2) ? LOAD_A : SUB_A);
@@ -129,7 +129,7 @@ module Controller(
                 selA2 = 1'b1;
             end 
             DONE: begin
-                done = 1'b1;
+                final_done = 1'b1;
             end
         endcase
     end
