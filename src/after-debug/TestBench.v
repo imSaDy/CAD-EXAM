@@ -29,17 +29,17 @@ module tb_Top();
 
     initial begin
 
-        A_init1 = 8'h00; W_init1 = 8'h00;
-        A_init2 = 8'h00; W_init2 = 8'h00;
+        A_init1 = 8'b00000000; W_init1 = 8'b00000000;
+        A_init2 = 8'b00000000; W_init2 = 8'b00000000;
         rst = 1; start = 1'b0;
 
         #10 rst = 0;
-//11111111,01100100,11111111,01100100,1100011100111000
+//00100010,01110010,00011001,01100010,0001100010110110
         #10 start = 1'b1;  // max value of 16 bit = 65535
-            A_init1 = 8'b11111111;
-            W_init1 = 8'b01100100;
-            A_init2 = 8'b11111111;
-            W_init2 = 8'b01100100;
+            A_init1 = 8'b00100010;
+            W_init1 = 8'b01110010;
+            A_init2 = 8'b00011001;
+            W_init2 = 8'b01100010;
 
         #10 start = 1'b0;
         wait(final_done);
