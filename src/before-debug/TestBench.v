@@ -34,27 +34,28 @@ module tb_Top();
         rst = 1; start = 1'b0;
 
         #10 rst = 0;
-
-        #10 start = 1'b1;  // max value of 16 bit = 65535
-            A_init1 = 8'b11000001;
-            W_init1 = 8'b00111110;
-            A_init2 = 8'b11111111;
-            W_init2 = 8'b01101110;
-
-        #10 start = 1'b0;
-
-        #3000;
-        // rst = 1; 
-        // #10 rst = 0;
+//11111111,01100100,11111111,01100100,1100011100111000
         #10 start = 1'b1;  // max value of 16 bit = 65535
             A_init1 = 8'b11111111;
-            W_init1 = 8'b11111111;
+            W_init1 = 8'b01100100;
             A_init2 = 8'b11111111;
-            W_init2 = 8'b00000000;
+            W_init2 = 8'b01100100;
 
         #10 start = 1'b0;
+        wait(final_done);
+        #20; 
+        //#3000;
+        // // rst = 1; 
+        // // #10 rst = 0;
+        // #10 start = 1'b1;  // max value of 16 bit = 65535
+        //     A_init1 = 8'b11111111;
+        //     W_init1 = 8'b11111111;
+        //     A_init2 = 8'b11111111;
+        //     W_init2 = 8'b00000000;
 
-        #3000;
+        // #10 start = 1'b0;
+
+        // #3000;
         $stop;
     end
 endmodule

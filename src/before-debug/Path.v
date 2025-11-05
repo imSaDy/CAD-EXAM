@@ -103,7 +103,7 @@ module Path(
         .W(W),
         .ready(ready),
         .done(done),
-        .shift_count(shift_count_dp), // possibly bug
+        .shift_count(shift_count_dp),
         .mult_shift_en(mult_shift_en),
         .load_num_shift(load_num_shift),
         .en_num_shift(en_num_shift),
@@ -127,12 +127,12 @@ module Path(
 
     Counter #(
         .WIDTH(3) 
-    ) counter_P1_inst (
+    ) counter_sub (
         .clk(clk),
         .rst(rst),
         .load(load_PI_sub),
         .en(en_cnt_sub),
-        .PI(3'd8 - shift_count_dp), // possibly bug
+        .PI(3'd8 - shift_count_dp),
         .count(sub_cnt)
     );
 
@@ -140,9 +140,9 @@ module Path(
 
     Register #(
         .WIDTH(1)
-    ) reg_co_sub_inst (
+    ) reg_co_sub (
         .clk(clk),
-        .rst(rst | rst_co_sub), // possibly bug
+        .rst(rst | rst_co_sub),
         .load(wire_co_sub),
         .PI(wire_co_sub),
         .register(temp_co_sub)

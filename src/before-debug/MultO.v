@@ -37,7 +37,7 @@ module MultO (
         .rst(rst),
         .load(load_num_shift),
         .en(en_num_shift),
-        .PI(3'd8 - shift_count), // possibly bug
+        .PI(3'd8 - shift_count),
         .count(cnt)
     );
     
@@ -52,7 +52,7 @@ module MultO (
 
     Register #(
         .WIDTH(1)
-    ) reg_ready_inst (
+    ) reg_ready_register (
         .clk(clk),
         .rst(rst | rst_ready),
         .load(co_mult),

@@ -20,8 +20,6 @@ module Top(
     wire rst_co_sub1, rst_co_sub2;
     wire rst_controller;
 
-    assign co_lod = 1'b0; 
-
     DataPath datapath (
         .clk(clk),
         .rst(rst | rst_controller),

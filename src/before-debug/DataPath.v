@@ -134,7 +134,7 @@ module DataPath(
         .WIDTH(16)
     ) accumulator (
         .clk(clk),
-        .rst(rst), // possibly bug
+        .rst(rst),
         .en_acc(en_acc & update_acc),
         .data1(Partial1),
         .data2(Partial2),
