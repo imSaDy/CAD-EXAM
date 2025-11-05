@@ -19,7 +19,7 @@ module MultO (
 
     MultShiftRegister #(
         .WIDTH(16)
-    ) partial_shifter (
+    ) mult_shift_register (
         .clk(clk),
         .rst(rst),
         .shift_en(mult_shift_en),
@@ -51,7 +51,7 @@ module MultO (
 
     Register #(
         .WIDTH(1)
-    ) reg_ready_inst (
+    ) reg_ready_register (
         .clk(clk),
         .rst(rst | rst_ready),
         .load(co_mult),

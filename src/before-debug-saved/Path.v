@@ -94,7 +94,7 @@ module Path(
     
     
 
-    ShiftRegister #(
+    MultShiftRegister #(
         .WIDTH(8)
     ) shift_reg_sub (
         .clk(clk),
@@ -110,7 +110,7 @@ module Path(
 
     Counter #(
         .WIDTH(3) 
-    ) counter_P1_inst (
+    ) counter_sub (
         .clk(clk),
         .rst(rst),
         .load(load_PI_sub),
@@ -123,7 +123,7 @@ module Path(
 
     Register #(
         .WIDTH(1)
-    ) reg_co_sub_inst (
+    ) reg_co_sub (
         .clk(clk),
         .rst(rst), // possibly bug
         .load(wire_co_sub),
