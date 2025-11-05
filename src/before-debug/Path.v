@@ -18,13 +18,19 @@ module Path(
     input load_PI_sub,
     input en_cnt_sub,
     input load_num_shift,
+    input mult_shift_en,
+    input rst_co_sub,
+    input A_is_zero, 
+
     output [15:0] partialO,
     output done,
     output ready,
-    output co_sub
+    output co_sub,
+    output co_lod
 );
     wire [7:0] mux_out, xor_out, A, W, sub;
     wire [2:0] wire_shift_count, shift_count_dp, sub_cnt;
+    wire temp_co_sub;
 
     Mux2 #(
         .WIDTH(8)
@@ -33,6 +39,17 @@ module Path(
         .in1(xor_out),
         .sel(selA),
         .out(mux_out)
+    );
+
+    wire [7:0] final_sub; 
+
+    Mux2 #(
+        .WIDTH(8)
+    ) mux_sub (
+        .in0(sub),
+        .in1(8'b0),
+        .sel(done),
+        .out(final_sub)
     );
 
     Register #(
@@ -44,6 +61,8 @@ module Path(
         .PI(mux_out),
         .register(A)
     );
+
+    assign A_is_zero = (A == 0);
 
     Register #(
         .WIDTH(8)
@@ -63,12 +82,12 @@ module Path(
         .shift_en(shift_en_LOD),
         .cnt_en(cnt_en_LOD),
         .shift_count(wire_shift_count),
-        .co_LOD(co_LOD),
+        .co_LOD(co_lod),
         .done(done)
     );
 
     Register #(
-        .WIDTH(8)
+        .WIDTH(3)
     ) registerShiftCount (
         .clk(clk),
         .rst(rst),
@@ -83,6 +102,7 @@ module Path(
         .load_mult(load_mult),
         .W(W),
         .ready(ready),
+        .done(done),
         .shift_count(shift_count_dp), // possibly bug
         .mult_shift_en(mult_shift_en),
         .load_num_shift(load_num_shift),
@@ -91,21 +111,19 @@ module Path(
         .final_partial(partialO)
     );
     
-    
-
-    ShiftRegister #(
+    MultShiftRegister #(
         .WIDTH(8)
     ) shift_reg_sub (
         .clk(clk),
         .rst(rst),
-        .shift_en(shift_en_sub),
+        .shift_en(shift_en_sub & ~co_sub),
         .ser_in(1'b0),
         .load(load_sub_reg),
         .PI(8'b1),
         .data_out(sub)
     );
 
-    assign xor_out = sub ^ A;
+    assign xor_out = final_sub ^ A;
 
     Counter #(
         .WIDTH(3) 
@@ -114,7 +132,7 @@ module Path(
         .rst(rst),
         .load(load_PI_sub),
         .en(en_cnt_sub),
-        .PI(4'b1000 - shift_count_dp), // possibly bug
+        .PI(3'd8 - shift_count_dp), // possibly bug
         .count(sub_cnt)
     );
 
@@ -124,9 +142,10 @@ module Path(
         .WIDTH(1)
     ) reg_co_sub_inst (
         .clk(clk),
-        .rst(rst), // possibly bug
+        .rst(rst | rst_co_sub), // possibly bug
         .load(wire_co_sub),
         .PI(wire_co_sub),
-        .register(co_sub)
+        .register(temp_co_sub)
     );
+    assign co_sub = temp_co_sub | (shift_count_dp == 0);
 endmodule

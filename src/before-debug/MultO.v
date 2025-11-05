@@ -13,19 +13,20 @@ module MultO (
     output [15:0] final_partial,
     output ready
 );
+    wire reg_ready;
     wire [15:0] partial;
     wire [2:0] cnt;
     wire co_mult;
 
     MultShiftRegister #(
         .WIDTH(16)
-    ) partial_shifter (
+    ) mult_shift_register (
         .clk(clk),
         .rst(rst),
-        .shift_en(mult_shift_en),
+        .shift_en(mult_shift_en & (~ready)),
         .ser_in(1'b0),
         .load(load_mult),
-        .PI(W),
+        .PI({8'b0, W}),
         .data_out(partial)
     );
 
@@ -36,7 +37,7 @@ module MultO (
         .rst(rst),
         .load(load_num_shift),
         .en(en_num_shift),
-        .PI(4'b1000 - shift_count), // bug
+        .PI(3'd8 - shift_count), // possibly bug
         .count(cnt)
     );
     
@@ -56,8 +57,9 @@ module MultO (
         .rst(rst | rst_ready),
         .load(co_mult),
         .PI(co_mult),
-        .register(ready)
+        .register(reg_ready)
     );
 
+    assign ready = (reg_ready | (shift_count == 0));
     assign co_mult = &cnt;
 endmodule

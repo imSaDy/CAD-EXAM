@@ -19,6 +19,8 @@ module DataPath(
     input load_PI_sub1,
     input en_cnt_sub1,
     input load_num_shift1,
+    input mult_shift_en1,
+    input rst_co_sub1,
 
     input selA2,
     input loadA2,
@@ -37,16 +39,21 @@ module DataPath(
     input load_PI_sub2,
     input en_cnt_sub2,
     input load_num_shift2,
+    input mult_shift_en2,
+    input rst_co_sub2,
 
     input rst_acc,
     input sel_P,
+    input update_acc,
 
     output [15:0] final_result,
     output done,
     output Ready1,
     output Ready2,
     output co_sub1,
-    output co_sub2
+    output co_sub2,
+    output co_lod1,
+    output co_lod2 
 );
 
     wire [15:0] Partial1;
@@ -56,6 +63,7 @@ module DataPath(
     
     wire en_acc;
     wire [15:0] mux_out;
+    wire A_is_zero1, A_is_zero2; 
 
     Path path1 (
         .clk(clk),
@@ -77,11 +85,15 @@ module DataPath(
         .load_PI_sub(load_PI_sub1),
         .en_cnt_sub(en_cnt_sub1),
         .load_num_shift(load_num_shift1),
-        
+        .mult_shift_en(mult_shift_en1),
+        .rst_co_sub(rst_co_sub1),
+
+        .A_is_zero(A_is_zero1),
         .partialO(Partial1),
         .done(done1),
         .ready(Ready1),
-        .co_sub(co_sub1)
+        .co_sub(co_sub1),
+        .co_lod(co_lod1)
     );
 
     Path path2 (
@@ -104,22 +116,26 @@ module DataPath(
         .load_PI_sub(load_PI_sub2),
         .en_cnt_sub(en_cnt_sub2),
         .load_num_shift(load_num_shift2),
-        
+        .mult_shift_en(mult_shift_en2),
+        .rst_co_sub(rst_co_sub2),
+
+        .A_is_zero(A_is_zero2),
         .partialO(Partial2),
         .done(done2),
         .ready(Ready2),
-        .co_sub(co_sub2)
+        .co_sub(co_sub2),
+        .co_lod(co_lod2)
     );
 
     assign en_acc = Ready1 & Ready2;
-    assign done = done1 | done2;
+    assign done = A_is_zero1 & A_is_zero2;
 
     Accumulator #(
         .WIDTH(16)
     ) accumulator (
         .clk(clk),
         .rst(rst), // possibly bug
-        .en_acc(en_acc),
+        .en_acc(en_acc & update_acc),
         .data1(Partial1),
         .data2(Partial2),
         .register(final_result)
